@@ -1,0 +1,18 @@
+# compiled files
+*.class
+*.o
+
+# build output directories
+**/target/**
+**/bin/**
+**/out/**
+**/*.lst
+
+# editors
+.DS_Store
+.idea
+.vscode
+
+# react
+/node_modules
+/packages
