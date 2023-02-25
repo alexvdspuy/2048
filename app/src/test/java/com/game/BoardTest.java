@@ -16,65 +16,79 @@ class BoardTest {
         Board.setSize(SIZE);
     }
     
-    /** Test addRandomTwo() method. */
+    /** Test addRandomNum() method. */
     @Test
-    void testAddRandomTwo() {
+    void testAddRandomNum() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
-        Board.addRandomTwo(tester);
+        Board.addRandomNum(tester);
 
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(1, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 1) ^ (nrOfFours == 1);
+        assertTrue(addedRandom);
     }
 
     @Test
-    void testAddRandomTwoTwice() {
+    void testAddRandomNumTwice() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
-        Board.addRandomTwo(tester);
-        Board.addRandomTwo(tester);
+        Board.addRandomNum(tester);
+        Board.addRandomNum(tester);
 
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2) ^ 
+                ((nrOfTwos == 1) && (nrOfFours == 1));
+        assertTrue(addedRandom);
     }
 
     @Test
-    void testAddRandomTwoToNonEmptyBoard() {
+    void testAddRandomNumToNonEmptyBoard() {
         int[][] tester = new int[SIZE][SIZE];
         tester[1][1] = 2;
+        tester[2][2] = 4;
         int nrOfTwos = 1;
+        int nrOfFours = 1;
 
-        Board.addRandomTwo(tester);
+        Board.addRandomNum(tester);
 
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
-                if (r == 1 && c == 1) {
+                if ((r == 1 && c == 1) || (r == 2 && c == 2)) {
                     continue;
                 }
 
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2);
+        assertTrue(addedRandom);
     }
 
     /** Test shiftLeft() method. */
@@ -82,6 +96,7 @@ class BoardTest {
     void testShiftLeftOnEmptyBoard() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftLeft(tester);
 
@@ -89,11 +104,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -107,10 +125,11 @@ class BoardTest {
     }
 
     @Test
-    void testShiftLeftOnFirstRowAddTwo() {
+    void testShiftLeftOnFirstRowAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        tester[0][SIZE-1] = 4;
+        tester[0][SIZE-1] = 8;
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftLeft(tester);
 
@@ -118,11 +137,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(1, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 1) ^ (nrOfFours == 1);
+        assertTrue(addedRandom);
     }
 
     @Test
@@ -141,14 +163,15 @@ class BoardTest {
     }
 
     @Test
-    void testShiftLeftOnFullRowAddTwo() {
+    void testShiftLeftOnFullRowAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        int v = 4;
+        int v = 8;
         for (int c = 0; c < SIZE; c++) {
             tester[2][c] = v;
             v *= 2;
         }
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftLeft(tester);
 
@@ -156,11 +179,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -181,7 +207,7 @@ class BoardTest {
     }
 
     @Test
-    void testShiftLeftOnNonEmptyBoardAddTwo() {
+    void testShiftLeftOnNonEmptyBoardAddNum() {
         int[][] tester = new int[SIZE][SIZE];
         tester[0][2] = 4;
         for (int c = 0; c < SIZE; c++) {
@@ -192,15 +218,19 @@ class BoardTest {
         Board.shiftLeft(tester);
 
         int nrOfTwos = 0;
+        int nrOfFours = 0;
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2);
+        assertTrue(addedRandom);
     }
 
     /** Test shiftRight() method. */
@@ -208,6 +238,7 @@ class BoardTest {
     void testShiftRightOnEmptyBoard() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftRight(tester);
 
@@ -215,11 +246,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -233,10 +267,11 @@ class BoardTest {
     }
 
     @Test
-    void testShiftRightOnFirstRowAddTwo() {
+    void testShiftRightOnFirstRowAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        tester[0][0] = 4;
+        tester[0][0] = 16;
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftRight(tester);
 
@@ -244,11 +279,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(1, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 1) ^ (nrOfFours == 1);
+        assertTrue(addedRandom);
     }
 
     @Test
@@ -267,14 +305,15 @@ class BoardTest {
     }
 
     @Test
-    void testShiftRightOnFullRowAddTwo() {
+    void testShiftRightOnFullRowAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        int v = 4;
+        int v = 8;
         for (int c = 0; c < SIZE; c++) {
             tester[2][c] = v;
             v *= 2;
         }
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftRight(tester);
 
@@ -282,11 +321,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -307,7 +349,7 @@ class BoardTest {
     }
 
     @Test
-    void testShiftRightOnNonEmptyBoardAddTwo() {
+    void testShiftRightOnNonEmptyBoardAddNum() {
         int[][] tester = new int[SIZE][SIZE];
         tester[0][2] = 4;
         for (int c = 0; c < SIZE; c++) {
@@ -318,15 +360,19 @@ class BoardTest {
         Board.shiftLeft(tester);
 
         int nrOfTwos = 0;
+        int nrOfFours = 0;
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2);
+        assertTrue(addedRandom);
     }
 
     /** Test shiftUp() method. */
@@ -334,6 +380,7 @@ class BoardTest {
     void testShiftUpOnEmptyBoard() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftUp(tester);
 
@@ -341,11 +388,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -359,10 +409,11 @@ class BoardTest {
     }
 
     @Test
-    void testShiftUpOnFirstColumnAddTwo() {
+    void testShiftUpOnFirstColumnAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        tester[2][0] = 4;
+        tester[2][0] = 32;
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftUp(tester);
 
@@ -370,11 +421,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(1, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 1) ^ (nrOfFours == 1);
+        assertTrue(addedRandom);
     }
 
     @Test
@@ -393,14 +447,15 @@ class BoardTest {
     }
 
     @Test
-    void testShiftUpOnFullColumnAddTwo() {
+    void testShiftUpOnFullColumnAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        int v = 4;
+        int v = 8;
         for (int r = 0; r < SIZE; r++) {
             tester[r][1] = v;
             v *= 2;
         }
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftUp(tester);
 
@@ -408,11 +463,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -433,7 +491,7 @@ class BoardTest {
     }
 
     @Test
-    void testShiftUpOnNonEmptyBoardAddTwo() {
+    void testShiftUpOnNonEmptyBoardAddNum() {
         int[][] tester = new int[SIZE][SIZE];
         for (int r = 0; r < SIZE; r++) {
             tester[r][0] = 8;
@@ -444,15 +502,19 @@ class BoardTest {
         Board.shiftUp(tester);
 
         int nrOfTwos = 0;
+        int nrOfFours = 0;
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2);
+        assertTrue(addedRandom);
     }
 
     /** Test shiftDown() method. */
@@ -460,6 +522,7 @@ class BoardTest {
     void testShiftDownOnEmptyBoard() {
         int[][] tester = new int[SIZE][SIZE];
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftDown(tester);
 
@@ -467,11 +530,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -485,10 +551,11 @@ class BoardTest {
     }
 
     @Test
-    void testShiftDownOnFirstColumnAddTwo() {
+    void testShiftDownOnFirstColumnAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        tester[2][0] = 4;
+        tester[2][0] = 8;
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftDown(tester);
 
@@ -496,11 +563,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(1, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 1) ^ (nrOfFours == 1);
+        assertTrue(addedRandom);
     }
 
     @Test
@@ -519,14 +589,15 @@ class BoardTest {
     }
 
     @Test
-    void testShiftDownOnFullColumnAddTwo() {
+    void testShiftDownOnFullColumnAddNum() {
         int[][] tester = new int[SIZE][SIZE];
-        int v = 4;
+        int v = 8;
         for (int r = 0; r < SIZE; r++) {
             tester[r][1] = v;
             v *= 2;
         }
         int nrOfTwos = 0;
+        int nrOfFours = 0;
 
         Board.shiftDown(tester);
 
@@ -534,11 +605,14 @@ class BoardTest {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
         assertEquals(0, nrOfTwos);
+        assertEquals(0, nrOfFours);
     }
 
     @Test
@@ -559,7 +633,7 @@ class BoardTest {
     }
 
     @Test
-    void testShiftDownOnNonEmptyBoardAddTwo() {
+    void testShiftDownOnNonEmptyBoardAddNum() {
         int[][] tester = new int[SIZE][SIZE];
         for (int r = 0; r < SIZE; r++) {
             tester[r][0] = 8;
@@ -570,15 +644,19 @@ class BoardTest {
         Board.shiftDown(tester);
 
         int nrOfTwos = 0;
+        int nrOfFours = 0;
         for (int r = 0; r < SIZE; r++) {
             for (int c = 0; c < SIZE; c++) {
                 if (tester[r][c] == 2) {
                     nrOfTwos++;
+                } else if (tester[r][c] == 4) {
+                    nrOfFours++;
                 }
             }
         }
 
-        assertEquals(2, nrOfTwos);
+        boolean addedRandom = (nrOfTwos == 2) ^ (nrOfFours == 2);
+        assertTrue(addedRandom);
     }
 
     /** Test fullBoard() method. */

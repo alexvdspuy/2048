@@ -19,7 +19,8 @@ public class App {
 
         Board.setSize(SIZE);
         int[][] board = new int[SIZE][SIZE];
-        Board.addRandomTwo(board);
+        Board.addRandomNum(board);
+        Board.addRandomNum(board);
         Board.printBoard(board);
         Board.initGUI();
         Board.drawBoard(board);

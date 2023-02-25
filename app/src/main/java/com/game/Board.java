@@ -35,11 +35,11 @@ public class Board {
     }
     
     /**
-     * Add a piece with value 2 to a random, empty position on the board.
+     * Add a piece with either value 2 (90%) or 4 (10%) to a random, empty position on the board.
      * 
      * @param board The board.
      */
-    public static void addRandomTwo(int[][] board) {
+    public static void addRandomNum(int[][] board) {
         if (fullBoard(board)) {
             return;
         }
@@ -51,7 +51,12 @@ public class Board {
             c = rand.nextInt(size);
         } while (board[r][c] != 0);
 
-        board[r][c] = 2;
+        int p = rand.nextInt(100);
+        if (p < 90) {
+            board[r][c] = 2;
+        } else {
+            board[r][c] = 4;
+        }
     }
 
     /**
@@ -92,7 +97,7 @@ public class Board {
         }
 
         if (moved) {
-            addRandomTwo(board);
+            addRandomNum(board);
         }
     }
 
@@ -134,7 +139,7 @@ public class Board {
         }
 
         if (moved) {
-            addRandomTwo(board);
+            addRandomNum(board);
         }        
     }
 
@@ -176,7 +181,7 @@ public class Board {
         }
 
         if (moved) {
-            addRandomTwo(board);
+            addRandomNum(board);
         }
     }
 
@@ -218,7 +223,7 @@ public class Board {
         }
 
         if (moved) {
-            addRandomTwo(board);
+            addRandomNum(board);
         }        
     }
 
